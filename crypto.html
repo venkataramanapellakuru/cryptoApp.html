@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PVR Crypto</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ffcc00;
+      text-shadow: 2px 2px #000;
+      animation: bounce 2s infinite;
+      transform: skew(-10deg);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-left: 1.5rem;
+      position: relative;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ffcc00;
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      background-color: #444;
+      top: 100%;
+      left: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    nav ul li:hover ul {
+      display: block;
+    }
+
+    nav ul li ul li {
+      margin: 0;
+    }
+
+    nav ul li ul li a {
+      padding: 0.5rem 1rem;
+      display: block;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    nav ul li ul li a:hover {
+      background-color: #555;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      animation: slideIn 1s ease-in-out;
+    }
+
+    #search {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #search img {
+      margin-right: 1rem;
+      width: 25px;
+      height: 25px;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    #searchInput:focus {
+      border-color: #ffcc00;
+      outline: none;
+    }
+
+    #cryptoList {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .crypto-item {
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      background-color: #fff;
+      transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+
+    .crypto-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      background-color: #f0f8ff;
+    }
+
+    .crypto-item img {
+      width: 50px;
+      height: 50px;
+      margin-right: 1rem;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .crypto-item img:hover {
+      transform: rotate(360deg);
+    }
+
+    .crypto-item h3 {
+      color: #ff4500;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .crypto-item p {
+      margin: 0.5rem 0;
+      color: #555;
+    }
+
+    .crypto-item button {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #ff4500;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .crypto-item button:hover {
+      background-color: #ff6347;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #cryptoDetails {
+      margin-top: 2rem;
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #cryptoDetails h2 {
+      margin-top: 0;
+      color: #ff4500;
+    }
+
+    #cryptoInfo p {
+      margin: 0.5rem 0;
+      color: #555;
+    }
+
+    #history {
+      margin-top: 2rem;
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #history h2 {
+      margin-top: 0;
+      color: #ff4500;
+    }
+
+    #queries {
+      margin-top: 2rem;
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #queries h2 {
+      margin-top: 0;
+      color: #ff4500;
+    }
+
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+    }
+
+    footer .footer-section {
+      padding: 1rem;
+    }
+
+    footer h3 {
+      margin-top: 0;
+      color: #ffcc00;
+    }
+
+    footer p {
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .crypto-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .crypto-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">PVR Crypto</div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a>
+          <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#news">News</a></li>
+          </ul>
+        </li>
+        <li><a href="#favorites">Favorites</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a>
+          <ul>
+            <li><a href="#support">Support</a></li>
+            <li><a href="#feedback">Feedback</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="search">
+      <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Search">
+      <input type="text" id="searchInput" placeholder="Search for a cryptocurrency...">
+    </section>
+
+    <section id="cryptoList"></section>
+
+    <section id="cryptoDetails" class="hidden">
+      <h2 id="cryptoName"></h2>
+      <div id="cryptoInfo"></div>
+      <canvas id="priceChart"></canvas>
+    </section>
+
+    <section id="history" class="hidden">
+      <h2>Cryptocurrency History</h2>
+      <div id="cryptoHistory"></div>
+    </section>
+
+    <section id="queries">
+      <h2>Have any queries?</h2>
+      <p>Feel free to reach out to us with any questions or concerns.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-section">
+      <h3>About Us</h3>
+      <p>We provide real-time cryptocurrency data and analytics.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Contact Us</h3>
+      <p>Email: support@pvrcrypto.com</p>
+    </div>
+    <div class="footer-section">
+      <h3>Follow Us</h3>
+      <p>Facebook | Twitter | Instagram</p>
+    </div>
+    <p>&copy; 2024 PVR Crypto. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cryptoListElement = document.getElementById('cryptoList');
+      const searchInput = document.getElementById('searchInput');
+      const cryptoDetails = document.getElementById('cryptoDetails');
+      const cryptoName = document.getElementById('cryptoName');
+      const priceChartCtx = document.getElementById('priceChart').getContext('2d');
+      const cryptoInfo = document.getElementById('cryptoInfo');
+      const cryptoHistory = document.getElementById('cryptoHistory');
+      const historySection = document.getElementById('history');
+      
+      let favorites = [];
+
+      // Sample data for cryptocurrencies
+      const cryptocurrencies = [
+        { id: 'bitcoin', name: 'Bitcoin', price: 50000, marketCap: 900000000, historicalPrices: [40000, 45000, 50000], image: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png', history: 'Bitcoin was created in 2009 by an unknown person using the name Satoshi Nakamoto.' },
+        { id: 'ethereum', name: 'Ethereum', price: 3000, marketCap: 400000000, historicalPrices: [2000, 2500, 3000], image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', history: 'Ethereum was proposed in late 2013 by programmer Vitalik Buterin and development was crowdfunded in 2014.' },
+        { id: 'litecoin', name: 'Litecoin', price: 200, marketCap: 15000000, historicalPrices: [100, 150, 200], image: 'https://cryptologos.cc/logos/litecoin-ltc-logo.png', history: 'Litecoin was released via an open-source client on GitHub on October 7, 2011, by Charlie Lee, a former Google employee.' },
+        { id: 'ripple', name: 'Ripple', price: 1, marketCap: 30000000, historicalPrices: [0.5, 0.75, 1], image: 'https://cryptologos.cc/logos/xrp-xrp-logo.png', history: 'Ripple was released in 2012 and its ledger is maintained by the RippleNet network.' },
+        { id: 'cardano', name: 'Cardano', price: 2, marketCap: 45000000, historicalPrices: [1, 1.5, 2], image: 'https://cryptologos.cc/logos/cardano-ada-logo.png', history: 'Cardano was founded in 2015 by Ethereum co-founder Charles Hoskinson and its development began in 2017.' }
+        // Add more cryptocurrencies as needed
+      ];
+
+      const renderCryptoList = (cryptos) => {
+        cryptoListElement.innerHTML = '';
+        cryptos.forEach(crypto => {
+          const cryptoItem = document.createElement('div');
+          cryptoItem.className = 'crypto-item';
+          cryptoItem.innerHTML = `
+            <img src="${crypto.image}" alt="${crypto.name}">
+            <div>
+              <h3>${crypto.name}</h3>
+              <p>Price: $${crypto.price}</p>
+              <p>Market Cap: $${crypto.marketCap}</p>
+              <button class="favorite-btn" data-id="${crypto.id}">${favorites.includes(crypto.id) ? 'Unfavorite' : 'Favorite'}</button>
+            </div>
+          `;
+          cryptoItem.addEventListener('click', () => displayCryptoDetails(crypto));
+          cryptoItem.querySelector('.favorite-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(crypto.id);
+          });
+          cryptoListElement.appendChild(cryptoItem);
+        });
+      };
+
+      const displayCryptoDetails = (crypto) => {
+        cryptoDetails.classList.remove('hidden');
+        historySection.classList.remove('hidden');
+        cryptoName.textContent = crypto.name;
+        cryptoInfo.innerHTML = `
+          <p>Price: $${crypto.price}</p>
+          <p>Market Cap: $${crypto.marketCap}</p>
+        `;
+        cryptoHistory.innerHTML = `<p>${crypto.history}</p>`;
+        renderChart(crypto.historicalPrices);
+      };
+
+      const renderChart = (data) => {
+        new Chart(priceChartCtx, {
+          type: 'line',
+          data: {
+            labels: ['1 week ago', '3 days ago', 'Today'],
+            datasets: [{
+              label: 'Price',
+              data,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            },
+            animation: {
+              duration: 1000,
+              easing: 'easeInOutQuad'
+            }
+          }
+        });
+      };
+
+      const toggleFavorite = (cryptoId) => {
+        if (favorites.includes(cryptoId)) {
+          favorites = favorites.filter(id => id !== cryptoId);
+        } else {
+          favorites.push(cryptoId);
+        }
+        renderCryptoList(cryptocurrencies);
+      };
+
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const filteredCryptos = cryptocurrencies.filter(crypto => crypto.name.toLowerCase().includes(query));
+        renderCryptoList(filteredCryptos);
+      });
+
+      renderCryptoList(cryptocurrencies);
+    });
+  </script>
+</body>
+</html>
